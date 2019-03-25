@@ -31,7 +31,7 @@ export default {
     }
   },
   async asyncData({ app, store, params, route, payload }) {
-    const { data } = await axios.get(`/wp-json/wp/v2/pages/?slug=home`)
+    const { data } = await axios.get(`/wp-json/wp/v2/pages/?slug=cf7`)
     console.log(data)
     return { info: data }
   },
