@@ -15,7 +15,6 @@ section.container
 
 <script>
 import axios from 'axios'
-
 export default {
   components: {},
   props: {
@@ -26,13 +25,12 @@ export default {
   },
   data() {
     return {
-      cf7: 'cf7'
-      // info: ''
+      cf7: 'cf7',
+      info: ''
     }
   },
   async asyncData({ app, store, params, route, payload }) {
     const { data } = await axios.get(`/wp-json/wp/v2/pages/?slug=cf7`)
-    console.log(data)
     return { info: data }
   },
   mounted() {}
