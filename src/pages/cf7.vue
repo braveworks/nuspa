@@ -2,16 +2,39 @@
 section.container
   div
     h1.title cf7 test
-    h2.subtitle
-      | My fantabulous Nuxt.js project
+    h2.subtitle My fantabulous Nuxt.js project
+    article
+      section(v-for="item in info")
+        h3 {{ item.title.rendered }}
+        time {{ item.date.slice(0, 10) }}
+        div(v-html="item.content.rendered")
     p
       nuxt-link(to="/")
         | index
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   components: {},
+  props: {
+    theUrl: {
+      type: String,
+      default: `/wp-json/wp/v2/pages/?slug=cf7`
+    }
+  },
+  data() {
+    return {
+      cf7: 'cf7'
+      // info: ''
+    }
+  },
+  async asyncData({ app, store, params, route, payload }) {
+    const { data } = await axios.get(`/wp-json/wp/v2/pages/?slug=home`)
+    console.log(data)
+    return { info: data }
+  },
   mounted() {}
 }
 </script>
