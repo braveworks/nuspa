@@ -78,7 +78,9 @@ function replaceNuxtHtml($target_html)
     // dom
     $dom = new DOMDocument();
     $dom->formatOutput = true; // 整形
+    libxml_use_internal_errors(true);
     $dom->loadHTML($html);
+    libxml_clear_errors();
 
     // タイトルを現在のページに書き換え
     $xpath = new DOMXpath($dom);
@@ -90,7 +92,8 @@ function replaceNuxtHtml($target_html)
     }
 
     // html内を置換
-    $output = $dom->saveHTML();
+    // $output = $dom->saveHTML();
+    $output = mb_convert_encoding($dom->saveHTML(), 'utf-8', 'HTML-ENTITIES');
     $output = str_replace('<!-- [wp-head] -->', getOb('wp_head'), $output);
     $output = str_replace('<!-- [wp-footer] -->', getOb('wp_footer'), $output);
     $output = str_replace('<!-- [wp-cf7-data] -->', $script_val, $output);
