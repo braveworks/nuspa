@@ -6,6 +6,7 @@ import pkg from './package'
 const WP_SITE = 'http://nuxtwp.local'
 const WP_API = '/wp-json'
 const isDev = process.env.NODE_ENV !== 'production'
+// const wp = new WPAPI({ endpoint: `${WP_SITE}${WP_API}` })
 
 export default {
   mode: 'spa',
@@ -28,20 +29,20 @@ export default {
       {
         name: 'viewport',
         content: 'width=device-width, initial-scale=1'
-      },
-      {
-        hid: 'description',
-        name: 'description',
-        content: pkg.description
       }
-    ],
-    link: [
-      {
-        rel: 'icon',
-        type: 'image/x-icon',
-        href: '/favicon.ico'
-      }
+      // {
+      //   hid: 'description',
+      //   name: 'description',
+      //   content: pkg.description
+      // }
     ]
+    // link: [
+    //   {
+    //     rel: 'icon',
+    //     type: 'image/x-icon',
+    //     href: '/favicon.ico'
+    //   }
+    // ]
   },
 
   /*
@@ -156,5 +157,5 @@ export default {
   //         )
   //     })
   //   }
-  // },
+  // }
 }

@@ -69,6 +69,9 @@ function getNuxtHtml($index_html)
 function replaceNuxtHtml($target_html)
 {
     $html = file_get_contents($target_html);
+    $html = str_replace('<!-- [wp-head] -->', getOb('wp_head'), $html);
+    $html = str_replace('<!-- [wp-footer] -->', getOb('wp_footer'), $html);
+    $html = str_replace('<!-- [wp-cf7-data] -->', $script_val, $html);
 
     // jsにわたす wpdf7 ID取得
     $cf7Form    = getWPCF7();
@@ -91,12 +94,11 @@ function replaceNuxtHtml($target_html)
         }
     }
 
-    // html内を置換
-    // $output = $dom->saveHTML();
+    // utf-8
     $output = mb_convert_encoding($dom->saveHTML(), 'utf-8', 'HTML-ENTITIES');
-    $output = str_replace('<!-- [wp-head] -->', getOb('wp_head'), $output);
-    $output = str_replace('<!-- [wp-footer] -->', getOb('wp_footer'), $output);
-    $output = str_replace('<!-- [wp-cf7-data] -->', $script_val, $output);
+    // コメント・改行削除で圧縮
+    $output = preg_replace('/<!--[\s\S]*?-->/s', '', $output);
+    // $output = preg_replace('/(\t|\r\n|\r|\n)/s', '', $output);
 
     return $output;
 }
