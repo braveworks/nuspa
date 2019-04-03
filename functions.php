@@ -94,9 +94,7 @@ function replaceNuxtHtml($target_html)
         }
     }
 
-    // utf-8
     $output = mb_convert_encoding($dom->saveHTML(), 'utf-8', 'HTML-ENTITIES');
-    // コメント・改行削除で圧縮
     $output = preg_replace('/<!--[\s\S]*?-->/s', '', $output);
     // $output = preg_replace('/(\t|\r\n|\r|\n)/s', '', $output);
 
