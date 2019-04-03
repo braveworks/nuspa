@@ -33,10 +33,7 @@ export default {
     const article = await app.$wp
       .posts()
       .id(params.id)
-      .then(post => {
-        console.log(post.id)
-        return post || error(error404)
-      })
+      .then(post => post || error(error404))
       .catch(e => error(error404))
 
     return { article }
