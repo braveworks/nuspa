@@ -8,38 +8,38 @@
  */
 
 /**
- * 不要コードを<head>から不要な出力を削除
+ * <head>から不要な出力を削除
  *
  * @return void
  */
 function removeHeadMeta()
 {
-    remove_action('wp_head', 'wp_generator');
-    remove_action('wp_head', 'rsd_link');
-    remove_action('wp_head', 'wlwmanifest_link');
-    remove_action('wp_head', 'index_rel_link');
-    remove_action('wp_head', 'parent_post_rel_link', 10, 0);
-    remove_action('wp_head', 'start_post_rel_link', 10, 0);
-    remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0);
-    remove_action('wp_head', 'wp_shortlink_wp_head', 10, 0);
-    remove_action('wp_head', 'feed_links', 2);
-    remove_action('wp_head', 'feed_links_extra', 3);
+  remove_action('wp_head', 'wp_generator');
+  remove_action('wp_head', 'rsd_link');
+  remove_action('wp_head', 'wlwmanifest_link');
+  remove_action('wp_head', 'index_rel_link');
+  remove_action('wp_head', 'parent_post_rel_link', 10, 0);
+  remove_action('wp_head', 'start_post_rel_link', 10, 0);
+  remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0);
+  remove_action('wp_head', 'wp_shortlink_wp_head', 10, 0);
+  remove_action('wp_head', 'feed_links', 2);
+  remove_action('wp_head', 'feed_links_extra', 3);
 
-    // 絵文字関連削除
-    remove_action('wp_head', 'print_emoji_detection_script', 7);
-    remove_action('admin_print_scripts', 'print_emoji_detection_script');
-    remove_action('wp_print_styles', 'print_emoji_styles');
-    remove_action('admin_print_styles', 'print_emoji_styles');
+  // 絵文字関連削除
+  remove_action('wp_head', 'print_emoji_detection_script', 7);
+  remove_action('admin_print_scripts', 'print_emoji_detection_script');
+  remove_action('wp_print_styles', 'print_emoji_styles');
+  remove_action('admin_print_styles', 'print_emoji_styles');
 
-    // Embed関連削除
-    remove_action('wp_head', 'rest_output_link_wp_head');
-    remove_action('wp_head', 'wp_oembed_add_discovery_links');
-    remove_action('wp_head', 'wp_oembed_add_host_js');
-    remove_action('template_redirect', 'rest_output_link_header', 11);
+  // Embed関連削除
+  remove_action('wp_head', 'rest_output_link_wp_head');
+  remove_action('wp_head', 'wp_oembed_add_discovery_links');
+  remove_action('wp_head', 'wp_oembed_add_host_js');
+  remove_action('template_redirect', 'rest_output_link_header', 11);
 
-    if (!is_admin()) {
-        wp_deregister_script('jquery'); // 非ログイン時はWPの既存jQueryを無効化
-    }
+  if (!is_admin()) {
+    wp_deregister_script('jquery'); // 非ログイン時はWPの既存jQueryを無効化
+  }
 }
 add_action('wp_enqueue_scripts', 'removeHeadMeta', 102);
 
@@ -52,11 +52,11 @@ add_action('wp_enqueue_scripts', 'removeHeadMeta', 102);
  */
 function getNuxtHtml($index_html)
 {
-    if (file_exists($index_html)) {
-        echo replaceNuxtHtml($index_html);
-    } else {
-        echo 'index not found';
-    }
+  if (file_exists($index_html)) {
+    echo replaceNuxtHtml($index_html);
+  } else {
+    echo 'index not found';
+  }
 }
 
 /**
@@ -68,37 +68,37 @@ function getNuxtHtml($index_html)
  */
 function replaceNuxtHtml($target_html)
 {
-    $html = file_get_contents($target_html);
-    $html = str_replace('<!-- [wp-head] -->', getOb('wp_head'), $html);
-    $html = str_replace('<!-- [wp-footer] -->', getOb('wp_footer'), $html);
-    $html = str_replace('<!-- [wp-cf7-data] -->', $script_val, $html);
+  $html = file_get_contents($target_html);
+  $html = str_replace('<!-- [wp-head] -->', getOb('wp_head'), $html);
+  $html = str_replace('<!-- [wp-footer] -->', getOb('wp_footer'), $html);
+  $html = str_replace('<!-- [wp-cf7-data] -->', $script_val, $html);
 
-    // jsにわたす wpdf7 ID取得
-    $cf7Form    = getWPCF7();
-    $cf7FormID  = $cf7Form[0]->ID ?: '';
-    $script_val = "<script> window.NUXT_WP = { id: {$cf7FormID} }; </script>";
+  // jsにわたす wpdf7 ID取得
+  $cf7Form    = getWPCF7();
+  $cf7FormID  = $cf7Form[0]->ID ?: '';
+  $script_val = "<script> window.NUXT_WP = { id: {$cf7FormID} }; </script>";
 
-    // dom
-    $dom = new DOMDocument();
-    $dom->formatOutput = true; // 整形
-    libxml_use_internal_errors(true);
-    $dom->loadHTML($html);
-    libxml_clear_errors();
+  // dom
+  $dom = new DOMDocument();
+  $dom->formatOutput = true; // 整形
+  libxml_use_internal_errors(true);
+  $dom->loadHTML($html);
+  libxml_clear_errors();
 
-    // タイトルを現在のページに書き換え
-    $xpath = new DOMXpath($dom);
-    $html_title = $xpath->query('//title');
-    if (!is_null($html_title)) {
-        foreach ($html_title as $title) {
-            $title->nodeValue = getWPPageTitle();
-        }
+  // タイトルを現在のページに書き換え
+  $xpath = new DOMXpath($dom);
+  $html_title = $xpath->query('//title');
+  if (!is_null($html_title)) {
+    foreach ($html_title as $title) {
+      $title->nodeValue = getWPPageTitle();
     }
+  }
 
-    $output = mb_convert_encoding($dom->saveHTML(), 'utf-8', 'HTML-ENTITIES');
-    $output = preg_replace('/<!--[\s\S]*?-->/s', '', $output);
-    // $output = preg_replace('/(\t|\r\n|\r|\n)/s', '', $output);
+  $output = mb_convert_encoding($dom->saveHTML(), 'utf-8', 'HTML-ENTITIES');
+  $output = preg_replace('/<!--[\s\S]*?-->/s', '', $output);
+  // $output = preg_replace('/(\t|\r\n|\r|\n)/s', '', $output);
 
-    return $output;
+  return $output;
 }
 
 /**
@@ -110,15 +110,15 @@ function replaceNuxtHtml($target_html)
  */
 function getOb($callback)
 {
-    if (!function_exists($callback)) {
-        return null;
-    }
-    ob_start();
-    $callback();
-    $ob_data = ob_get_contents();
-    ob_end_clean();
+  if (!function_exists($callback)) {
+    return null;
+  }
+  ob_start();
+  $callback();
+  $ob_data = ob_get_contents();
+  ob_end_clean();
 
-    return $ob_data;
+  return $ob_data;
 }
 
 /**
@@ -128,7 +128,7 @@ function getOb($callback)
  */
 function getWPPageTitle()
 {
-    return is_single() || is_page()
+  return is_single() || is_page()
     ? strip_tags(get_the_title()) . ' | ' . get_bloginfo('name')
     : get_bloginfo('name');
 }
@@ -140,14 +140,14 @@ function getWPPageTitle()
  *
  * @return array
  */
-function getWPCF7($cf7Title = 'Contact form 1')
+function getWPCF7($wpCf7Title = 'Contact form 1')
 {
-    $args = [
-      'post_type'   => 'wpcf7_contact_form',
-      'post_status' => 'publish',
-      'title'       => $wpCf7Title
-    ];
-    $form = get_posts($args);
+  $args = [
+    'post_type'   => 'wpcf7_contact_form',
+    'post_status' => 'publish',
+    'title'       => $wpCf7Title
+  ];
+  $form = get_posts($args);
 
-    return $form;
+  return $form;
 }
