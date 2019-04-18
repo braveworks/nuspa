@@ -69,14 +69,15 @@ function getNuxtHtml($index_html)
 function replaceNuxtHtml($target_html)
 {
   $html = file_get_contents($target_html);
-  $html = str_replace('<!-- [wp-head] -->', getOb('wp_head'), $html);
-  $html = str_replace('<!-- [wp-footer] -->', getOb('wp_footer'), $html);
-  $html = str_replace('<!-- [wp-cf7-data] -->', $script_val, $html);
 
   // jsにわたす wpdf7 ID取得
   $cf7Form    = getWPCF7();
   $cf7FormID  = $cf7Form[0]->ID ?: '';
   $script_val = "<script> window.NUXT_WP = { id: {$cf7FormID} }; </script>";
+
+  $html = str_replace('<!-- [wp-head] -->', getOb('wp_head'), $html);
+  $html = str_replace('<!-- [wp-footer] -->', getOb('wp_footer'), $html);
+  $html = str_replace('<!-- [wp-cf7-data] -->', $script_val, $html);
 
   // dom
   $dom = new DOMDocument();

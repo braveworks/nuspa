@@ -12,5 +12,5 @@
 if (is_preview()) {
     get_template_part('templates/content');
 } else {
-    getNuxtHtml(dirname(__FILE__)."/dist/index.html");
+    getNuxtHtml(dirname(__FILE__)."/assets/index.html");
 }

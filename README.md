@@ -8,16 +8,11 @@ non ssr
 
 ```bash
 .
-├── dist/           # nuxt build data
+├── assets/         # `nuxt build` generate assets
 ├── src/            # nuxt src directory
-├── test/           # nuxt test code
-├── jest.config.js  # jest config
-├── nuxt.config.js  # nuxt config
-├── package.json    # nuxt npm package
 ├── functions.php   # wordpress theme functions
 ├── index.php       # wordpress theme index
-├── style.css       # wordpress theme meta|style
-└── yarn.lock
+└── style.css       # wordpress theme meta|style
 ```
 
 ## Build Setup
@@ -25,6 +20,10 @@ non ssr
 clone ot wordpress theme directory
 
 ```bash
+
+# change nuxt src directory
+cd src
+
 # install dependencies
 $ yarn install
 

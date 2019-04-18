@@ -70,7 +70,6 @@ typings/
 
 # Nuxt generate
 dist
-assets/
 
 # vuepress build output
 .vuepress/dist
@@ -83,6 +82,3 @@ assets/
 
 # Service worker
 sw.*
-
-# vscode
-.vscode
