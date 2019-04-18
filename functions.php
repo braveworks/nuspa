@@ -70,10 +70,17 @@ function replaceNuxtHtml($target_html)
 {
   $html = file_get_contents($target_html);
 
-  // jsにわたす wpdf7 ID取得
-  $cf7Form    = getWPCF7();
-  $cf7FormID  = $cf7Form[0]->ID ?: '';
-  $script_val = "<script> window.NUXT_WP = { id: {$cf7FormID} }; </script>";
+  $cf7Form        = getWPCF7();
+  $nuxt_cf7_ID    = isset($cf7Form[0]->ID) ? "cf7ID: {$cf7Form[0]->ID},": "";
+  $nuxt_rest_root = "root: '" . esc_url_raw(rest_url()) . "',";
+  $nuxt_nonce     = "nonce: '" . wp_create_nonce('wp_rest') . "'";
+
+  $script_val =
+    "<script> window.NUXT_WP = {" .
+      $nuxt_cf7_ID .
+      $nuxt_rest_root .
+      $nuxt_nonce .
+    "}; </script>";
 
   $html = str_replace('<!-- [wp-head] -->', getOb('wp_head'), $html);
   $html = str_replace('<!-- [wp-footer] -->', getOb('wp_footer'), $html);
